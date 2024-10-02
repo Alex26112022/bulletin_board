@@ -1,12 +1,12 @@
-FROM python:3.12-alpine
+FROM python:latest
 
-WORKDIR /usr/src/app
+WORKDIR /bulletin_board
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements.txt ./
+RUN pip install --default-timeout=100 -r requirements.txt
 
 COPY . .

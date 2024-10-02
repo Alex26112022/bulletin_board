@@ -1,10 +1,46 @@
 services:
   web:
-    build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    build: .
+    tty: true
+    container_name: web
+    networks:
+      - backend
+      - frontend
+    command:
+      sh -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./app/:/usr/src/app/
+      - .:/bulletin_board
     ports:
-      - 8000:8000
+      - "8000:8000"
     env_file:
-      - ./.env.dev
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    container_name: db
+    networks:
+      - backend
+    restart: on-failure
+    expose:
+      - "5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:

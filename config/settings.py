@@ -25,11 +25,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
-
 ENV_TYPE = os.environ.get('ENV_TYPE')
 
+if ENV_TYPE == 'local':
+    DEBUG = int(os.environ.get("DEBUG", default=0))
+    host = os.environ.get('POSTGRES_HOST_LOCAL')
+
+    STATICFILES_DIRS = (
+        BASE_DIR / 'static',
+    )
+else:
+    DEBUG = 0
+    host = os.environ.get('POSTGRES_HOST')
+
+    STATIC_ROOT = BASE_DIR / 'static'
+
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
 # Application definition
 
@@ -72,17 +84,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-if ENV_TYPE == 'local':
-    host = os.environ.get('POSTGRES_HOST_LOCAL')
-
-    STATICFILES_DIRS = (
-        BASE_DIR / 'static',
-    )
-else:
-    host = os.environ.get('POSTGRES_HOST')
-
-    STATIC_ROOT = BASE_DIR / 'static'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

@@ -1,0 +1,62 @@
+services:
+  web:
+    build: .
+    tty: true
+    container_name: web
+    networks:
+      - backend
+    command:
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    container_name: db
+    networks:
+      - backend
+    restart: on-failure
+    expose:
+      - "5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "1337:80"
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    depends_on:
+      - web
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

@@ -1,5 +1,8 @@
 FROM python:latest
 
+LABEL authors="Алексей Денисенко"
+LABEL org.opencontainers.image.authors="AlexeyDenisenko2703@yandex.ru"
+
 RUN mkdir -p /home/app
 
 ENV HOME=/home/app

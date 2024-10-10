@@ -5,7 +5,7 @@ from users.models import User
 options = {'blank': True, 'null': True}
 
 
-class Bulletin(models.Model):
+class Ad(models.Model):
     """ Модель объявления.  """
     title = models.CharField(max_length=255, verbose_name='Название',
                              help_text='Введите название!')
@@ -15,7 +15,7 @@ class Bulletin(models.Model):
                                    help_text='Введите описание товара!',
                                    **options)
     author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name='bulletins',
+                               related_name='ads',
                                verbose_name='Автор')
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='Время и дата создания объявления')
@@ -26,6 +26,7 @@ class Bulletin(models.Model):
     class Meta:
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
+        ordering = ['-created_at']
 
 
 class Comment(models.Model):
@@ -34,7 +35,7 @@ class Comment(models.Model):
                             help_text='Введите текст комментария!')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='comments', verbose_name='Автор')
-    ad = models.ForeignKey(Bulletin, on_delete=models.CASCADE,
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE,
                            related_name='comments', verbose_name='Объявление',
                            help_text='Выберите объявление!')
     created_at = models.DateTimeField(auto_now_add=True,
@@ -46,3 +47,4 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+        ordering = ['-created_at']

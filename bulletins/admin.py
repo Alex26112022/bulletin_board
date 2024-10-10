@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from bulletins.models import Bulletin, Comment
+from bulletins.models import Ad, Comment
 
-admin.site.register(Bulletin)
+admin.site.register(Ad)
 admin.site.register(Comment)

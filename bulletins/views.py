@@ -1,9 +1,10 @@
+from rest_framework import filters
 from rest_framework.generics import CreateAPIView, ListAPIView, \
     RetrieveAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import AllowAny
-
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from bulletins.models import Ad, Comment
 from bulletins.paginators import MyPaginator
+from bulletins.permissions import IsAdmin, IsUser
 from bulletins.serializers import AdSerializer, AdCreateSerializer, \
     CommentCreateSerializer, CommentSerializer, CommentUpdateSerializer
 
@@ -23,6 +24,8 @@ class AdListApiView(ListAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     pagination_class = MyPaginator
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
     permission_classes = [AllowAny]
 
 
@@ -36,12 +39,14 @@ class AdUpdateApiView(UpdateAPIView):
     """ Редактирует объявление. """
     queryset = Ad.objects.all()
     serializer_class = AdCreateSerializer
+    permission_classes = [IsAdmin | IsUser]
 
 
 class AdDestroyApiView(DestroyAPIView):
     """ Удаляет объявление. """
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+    permission_classes = [IsAdmin | IsUser]
 
 
 class CommentCreateApiView(CreateAPIView):
@@ -64,9 +69,11 @@ class CommentUpdateApiView(UpdateAPIView):
     """ Редактирует отзыв. """
     queryset = Comment.objects.all()
     serializer_class = CommentUpdateSerializer
+    permission_classes = [IsAdmin | IsUser]
 
 
 class CommentDestroyApiView(DestroyAPIView):
     """ Удаляет отзыв. """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAdmin | IsUser]

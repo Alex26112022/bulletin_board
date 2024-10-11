@@ -43,6 +43,8 @@ services:
     networks:
       - backend
       - frontend
+    env_file:
+      - .env
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media

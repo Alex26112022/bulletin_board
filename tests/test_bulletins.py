@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 
 logout_user = APIClient()
 

@@ -1,5 +1,4 @@
 import pytest
-from rest_framework.test import APIClient
 
 from bulletins.models import Ad, Comment
 from users.models import User

@@ -1,7 +1,7 @@
 from rest_framework import filters
 from rest_framework.generics import CreateAPIView, ListAPIView, \
     RetrieveAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from bulletins.models import Ad, Comment
 from bulletins.paginators import MyPaginator
 from bulletins.permissions import IsAdmin, IsUser

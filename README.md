@@ -5,11 +5,13 @@
    - в файле .env -> ENV_TYPE=local
    - python manage.py migrate
    - python manage.py runserver
+   - python manage.py csu # создание суперпользователя
 2. С помощью Docker:
    - docker-compose build
    - docker-compose up -d
    - docker-compose exec web python manage.py migrate --noinput
    - docker-compose exec web python manage.py collectstatic --noinput
+   - docker-compose exec web python manage.py csu # создание суперпользователя
 ### Запуск тестов:
    - pytest
    - pytest --cov # посмотреть покрытие

@@ -7,6 +7,7 @@ RUN mkdir -p /home/app
 
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
+
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/static
 RUN mkdir $APP_HOME/media
